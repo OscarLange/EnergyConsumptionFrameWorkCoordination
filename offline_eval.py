@@ -13,6 +13,12 @@ dir_path = os.path.dirname(os.path.realpath(__file__)) + "/"
 df = pd.read_csv('./stats/initial_stats.csv')
 df = df.sort_values(by=['Freq', 'Util', 'WorkMode'])
 
+df1 = pd.read_csv('./stats/test_firebase3.csv')
+df2 = pd.read_csv('./stats/test_preproc2.csv')
+
+df3 = pd.read_csv('./stats/test_firebase4.csv')
+df4 = pd.read_csv('./stats/test_preproc4.csv')
+
 def enumerate_work(work):
     if(work == "noop_test.csv"):
         return 0
@@ -69,6 +75,15 @@ def random_forrest():
     graph.write_png(dir_path + "pictures/tree.png")
     joblib.dump(rf, "./random_forest.joblib")
 
+def mean_df():
+    global df,df1, df2
+    print(df1.groupby(['Freq'])['Power'].mean())
+    print(df2.groupby(['Freq'])['Power'].mean())
+    print(df3.groupby(['Freq'])['Power'].max())
+    print(df4.groupby(['Freq'])['Power'].mean())
+    df = df[df['WorkMode'] == "linkedlist_test.csv"]
+    print(df.groupby(['Freq','Util'])['Power'].mean())
+
 def numpy_polyfit():
     global df
     print(df.groupby(['Freq','Util'])['Power'].mean())
@@ -102,11 +117,12 @@ def numpy_polyfit():
     plt.scatter(X2, y2, color = 'red', label="Avg 240")
     plt.plot(X2, poly1d2(X2), color = 'red', label="Polynomial 240")
 
-    plt.xlabel('Work Percentage x Freq')
+    plt.xlabel('Work Percentage + Freq')
     plt.ylabel('Power Consumption')
     plt.legend()
 
     plt.show()
 
-random_forrest()
-numpy_polyfit()
+#random_forrest()
+#numpy_polyfit()
+mean_df()
